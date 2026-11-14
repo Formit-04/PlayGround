@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#061a2b" />
+  <title>DEEP BLUE — The big one is out there</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="game-shell">
+    <canvas id="ocean" aria-label="Animated 3D ocean fishing game"></canvas>
+    <div class="water-vignette"></div>
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Deep Blue home"><span class="brand-mark">◉</span><span>DEEP<span class="brand-light">BLUE</span></span></a>
+      <div class="top-center"><span class="location-dot"></span><span>OPEN OCEAN</span><span class="top-divider">/</span><span id="weather">CLEAR SKIES</span></div>
+      <div class="wallet"><span class="coin">✦</span><span id="coins">240</span><span class="wallet-label">COINS</span></div>
+    </header>
+
+    <section class="intro" id="intro">
+      <p class="eyebrow"><span class="eyebrow-line"></span> THE WATER IS CALLING</p>
+      <h1>THE BIG ONE<br>IS <em>OUT THERE.</em></h1>
+      <p class="intro-copy">Cast a line into the deep. You never know what<br class="desktop-only"> might be waiting beneath the surface.</p>
+      <div class="intro-stats"><span><b>12</b> SPECIES</span><span class="stat-sep">·</span><span><b>6</b> RARITIES</span><span class="stat-sep">·</span><span>INFINITE OCEAN</span></div>
+    </section>
+
+    <aside class="depth-readout"><span class="depth-label">DEPTH</span><span id="depth">042</span><span class="depth-unit">M</span><div class="depth-ticks"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></aside>
+
+    <section class="hud-left">
+      <div class="level-card"><div class="level-top"><span>ANGLER LEVEL</span><span id="level">01</span></div><div class="xp-track"><div class="xp-fill" id="xpFill"></div></div><div class="xp-bottom"><span id="xpLabel">0 / 100 XP</span><span>ROOKIE</span></div></div>
+      <div class="caught-total"><span class="fish-icon">◈</span><span><b id="caughtCount">0</b><small>CAUGHT</small></span></div>
+    </section>
+
+    <div class="fish-label" id="fishLabel"><span class="label-line"></span><span><small>SPOTTED NEARBY</small><b id="spottedName">—</b></span></div>
+
+    <section class="catch-card" id="catchCard" aria-live="polite">
+      <div class="catch-heading"><span class="catch-spark">✦</span><span>NEW CATCH</span><button id="closeCatch" aria-label="Close catch card">×</button></div>
+      <div class="catch-art" id="catchArt">🐟</div>
+      <p class="catch-rarity" id="catchRarity">COMMON</p><h2 id="catchName">Bluefin</h2>
+      <div class="catch-meta"><span><small>WEIGHT</small><b id="catchWeight">2.4 kg</b></span><span><small>VALUE</small><b id="catchValue">+18 ✦</b></span></div>
+      <button class="keep-button" id="keepButton">ADD TO COLLECTION <span>↗</span></button>
+    </section>
+
+    <section class="collection-panel">
+      <div class="collection-title"><div><span class="panel-kicker">YOUR LOGBOOK</span><h2>FISHING LOG</h2></div><span class="collection-count"><b id="speciesCount">0</b> / 12</span></div>
+      <div class="species-list" id="speciesList"></div>
+      <button class="view-all" id="viewAll">VIEW ALL SPECIES <span>↗</span></button>
+    </section>
+
+    <div class="cast-status" id="castStatus"><span class="status-pulse"></span><span id="statusText">THE WATER IS CALM</span></div>
+
+    <section class="action-area">
+      <div class="cast-controls"><div class="rod-hint"><span class="keycap">SPACE</span><span>TO CAST / REEL</span></div><button class="cast-button" id="castButton"><span class="button-icon">↗</span><span id="buttonText">CAST YOUR LINE</span><span class="button-arrow">→</span></button><div class="cast-caption" id="castCaption">A whole ocean. Anything could bite.</div></div>
+      <div class="line-tension" id="tensionBox"><div class="tension-label"><span>LINE TENSION</span><span id="tensionText">STEADY</span></div><div class="tension-track"><div class="tension-zone"></div><div class="tension-fill" id="tensionFill"></div><div class="tension-marker" id="tensionMarker"></div></div></div>
+    </section>
+
+    <footer class="bottom-bar"><span>◉&nbsp; PACIFIC OCEAN <span class="footer-dot">·</span> 34° 12' N, 128° 04' W</span><span class="footer-right">A LITTLE PATIENCE GOES A LONG WAY <span>↗</span></span></footer>
+    <div class="toast" id="toast"></div>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>
