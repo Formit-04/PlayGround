@@ -5,60 +5,160 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#061a2b" />
   <title>DEEP BLUE — The big one is out there</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='44' fill='%231c7889'/%3E%3Cpath d='M22 52c14-18 38-20 53-4-14 17-39 18-53 4z' fill='%23d9efdf'/%3E%3Ccircle cx='63' cy='47' r='3' fill='%230b2a36'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <main class="game-shell">
-    <canvas id="ocean" aria-label="Animated 3D ocean fishing game"></canvas>
+  <main class="game-shell" id="gameShell">
+    <canvas id="ocean" aria-label="Animated 3D ocean fishing scene"></canvas>
     <div class="water-vignette"></div>
+
     <header class="topbar">
-      <a class="brand" href="#" aria-label="Deep Blue home"><span class="brand-mark">◉</span><span>DEEP<span class="brand-light">BLUE</span></span></a>
-      <div class="top-center"><span class="location-dot"></span><span>OPEN OCEAN</span><span class="top-divider">/</span><span id="weather">CLEAR SKIES</span></div>
-      <div class="wallet"><span class="coin">✦</span><span id="coins">240</span><span class="wallet-label">COINS</span></div>
+      <a class="brand" href="#" aria-label="Deep Blue home">
+        <span class="brand-mark">◉</span><span>DEEP<span class="brand-light">BLUE</span></span>
+      </a>
+      <div class="top-center">
+        <span class="location-dot"></span><span>OPEN OCEAN</span><span class="top-divider">/</span>
+        <span id="weather">CLEAR SKIES</span><span class="top-divider">/</span>
+        <span>DEPTH <b id="depth">042</b> M</span>
+      </div>
+      <div class="top-actions">
+        <div class="wallet" title="Your coins"><span class="coin">✦</span><span id="coins">240</span><span class="wallet-label">COINS</span></div>
+        <button class="nav-button" id="openLog" type="button">
+          <span class="nav-glyph" aria-hidden="true">▤</span>
+          <span class="nav-copy">FISH LOG<small id="logCount">0 / 12</small></span>
+        </button>
+        <button class="nav-button" id="openStore" type="button">
+          <span class="nav-glyph" aria-hidden="true">⌁</span>
+          <span class="nav-copy">ROD STORE<small>GEAR UP</small></span>
+        </button>
+      </div>
     </header>
 
-    <section class="intro" id="intro">
+    <section class="hero" id="intro">
       <p class="eyebrow"><span class="eyebrow-line"></span> THE WATER IS CALLING</p>
       <h1>THE BIG ONE<br>IS <em>OUT THERE.</em></h1>
-      <p class="intro-copy">Cast a line into the deep. You never know what<br class="desktop-only"> might be waiting beneath the surface.</p>
-      <div class="intro-stats"><span><b>12</b> SPECIES</span><span class="stat-sep">·</span><span><b>6</b> RARITIES</span><span class="stat-sep">·</span><span>INFINITE OCEAN</span></div>
+      <p class="hero-copy">Cast a line into the deep. You never know what<br class="desktop-only"> might be waiting beneath the surface.</p>
+      <div class="hero-stats"><span><b>12</b> SPECIES</span><span class="stat-sep">·</span><span><b>6</b> RARITIES</span><span class="stat-sep">·</span><span>INFINITE OCEAN</span></div>
     </section>
 
-    <aside class="depth-readout"><span class="depth-label">DEPTH</span><span id="depth">042</span><span class="depth-unit">M</span><div class="depth-ticks"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></aside>
-
-    <section class="hud-left">
-      <div class="level-card"><div class="level-top"><span>ANGLER LEVEL</span><span id="level">01</span></div><div class="xp-track"><div class="xp-fill" id="xpFill"></div></div><div class="xp-bottom"><span id="xpLabel">0 / 100 XP</span><span>ROOKIE</span></div></div>
-      <div class="caught-total"><span class="fish-icon">◈</span><span><b id="caughtCount">0</b><small>CAUGHT</small></span></div>
+    <section class="left-hud">
+      <div class="angler-panel panel">
+        <div class="angler-top"><span>ANGLER LEVEL</span><b id="level">01</b></div>
+        <div class="xp-track"><i id="xpFill"></i></div>
+        <div class="xp-bottom"><span id="xpLabel">0 / 100 XP</span><span id="rank">ROOKIE</span></div>
+        <div class="caught-line">
+          <span class="caught-symbol">◈</span>
+          <span><b id="caughtCount">0</b> CAUGHT</span>
+          <span class="best-weight" id="bestWeight">BEST —</span>
+        </div>
+      </div>
     </section>
+
+    <aside class="right-rail">
+      <div class="rod-panel panel">
+        <div class="panel-head"><span>CURRENT ROD</span><button type="button" class="panel-link" id="upgradeRod">STORE ↗</button></div>
+        <div class="rod-name-row">
+          <span class="rod-emblem" id="rodEmblem">🎣</span>
+          <div><b id="rodName">Bamboo Rod</b><small id="rodDesc">A humble start.</small></div>
+        </div>
+        <div class="rod-stat"><span>REEL</span><div class="mini-bar"><i id="statReel"></i></div><em id="statReelVal">1.0×</em></div>
+        <div class="rod-stat"><span>LUCK</span><div class="mini-bar"><i id="statLuck"></i></div><em id="statLuckVal">+0%</em></div>
+        <div class="rod-stat"><span>CONTROL</span><div class="mini-bar"><i id="statControl"></i></div><em id="statControlVal">1.0×</em></div>
+      </div>
+      <div class="latest-panel panel" id="latestPanel">
+        <div class="panel-head"><span>LATEST CATCH</span><button type="button" class="panel-link" id="viewLogLink">VIEW LOG ↗</button></div>
+        <div class="latest-body" id="latestContent">
+          <span class="latest-empty">The water is still.<br>Cast your line to begin.</span>
+        </div>
+      </div>
+    </aside>
 
     <div class="fish-label" id="fishLabel"><span class="label-line"></span><span><small>SPOTTED NEARBY</small><b id="spottedName">—</b></span></div>
 
-    <section class="catch-card" id="catchCard" aria-live="polite">
-      <div class="catch-heading"><span class="catch-spark">✦</span><span>NEW CATCH</span><button id="closeCatch" aria-label="Close catch card">×</button></div>
-      <div class="catch-art" id="catchArt">🐟</div>
-      <p class="catch-rarity" id="catchRarity">COMMON</p><h2 id="catchName">Bluefin</h2>
-      <div class="catch-meta"><span><small>WEIGHT</small><b id="catchWeight">2.4 kg</b></span><span><small>VALUE</small><b id="catchValue">+18 ✦</b></span></div>
-      <button class="keep-button" id="keepButton">ADD TO COLLECTION <span>↗</span></button>
+    <section class="action-dock" id="actionDock">
+      <div class="dock-status"><span class="status-pulse"></span><span id="statusText">THE WATER IS CALM</span><span class="rod-chip" id="rodChip">BAMBOO ROD</span></div>
+      <button class="cast-button" id="castButton" type="button">
+        <span class="button-icon" aria-hidden="true">↗</span><span id="buttonText">CAST YOUR LINE</span><span class="button-arrow" aria-hidden="true">→</span>
+      </button>
+      <div class="line-tension" id="tensionBox">
+        <div class="tension-label"><span>LINE TENSION</span><span id="tensionText">STEADY</span></div>
+        <div class="tension-track"><div class="tension-zone"></div><div class="tension-fill" id="tensionFill"></div><div class="tension-marker" id="tensionMarker"></div></div>
+        <div class="tension-scale"><span>SLACK</span><span>PERFECT</span><span>SNAP</span></div>
+      </div>
+      <div class="dock-hint"><span class="keycap">SPACE</span><span id="castCaption">A whole ocean. Anything could bite.</span></div>
     </section>
 
-    <section class="collection-panel">
-      <div class="collection-title"><div><span class="panel-kicker">YOUR LOGBOOK</span><h2>FISHING LOG</h2></div><span class="collection-count"><b id="speciesCount">0</b> / 12</span></div>
-      <div class="species-list" id="speciesList"></div>
-      <button class="view-all" id="viewAll">VIEW ALL SPECIES <span>↗</span></button>
-    </section>
+    <footer class="bottom-bar">
+      <span>◉&nbsp; PACIFIC OCEAN <span class="footer-dot">·</span> 34° 12' N, 128° 04' W</span>
+      <span class="footer-right">A LITTLE PATIENCE GOES A LONG WAY <span>↗</span></span>
+    </footer>
 
-    <div class="cast-status" id="castStatus"><span class="status-pulse"></span><span id="statusText">THE WATER IS CALM</span></div>
+    <div class="toast" id="toast" role="status"></div>
 
-    <section class="action-area">
-      <div class="cast-controls"><div class="rod-hint"><span class="keycap">SPACE</span><span>TO CAST / REEL</span></div><button class="cast-button" id="castButton"><span class="button-icon">↗</span><span id="buttonText">CAST YOUR LINE</span><span class="button-arrow">→</span></button><div class="cast-caption" id="castCaption">A whole ocean. Anything could bite.</div></div>
-      <div class="line-tension" id="tensionBox"><div class="tension-label"><span>LINE TENSION</span><span id="tensionText">STEADY</span></div><div class="tension-track"><div class="tension-zone"></div><div class="tension-fill" id="tensionFill"></div><div class="tension-marker" id="tensionMarker"></div></div></div>
-    </section>
+    <div class="catch-layer" id="catchLayer" aria-hidden="true">
+      <article class="catch-card" id="catchCard" role="dialog" aria-labelledby="catchName">
+        <div class="catch-badge" id="catchBadge">NEW SPECIES</div>
+        <button class="catch-close" id="closeCatch" type="button" aria-label="Close catch card">×</button>
+        <div class="catch-art-wrap"><div class="catch-art" id="catchArt">🐟</div><div class="catch-glow" id="catchGlow"></div></div>
+        <p class="catch-rarity" id="catchRarity">COMMON</p>
+        <h2 id="catchName">Sunscale</h2>
+        <p class="catch-flavor" id="catchFlavor">A flash of gold in the shallows.</p>
+        <div class="catch-meta">
+          <span><small>WEIGHT</small><b id="catchWeight">2.4 kg</b></span>
+          <span><small>VALUE</small><b id="catchValue">+18 ✦</b></span>
+        </div>
+        <button class="keep-button" id="keepButton" type="button">ADD TO COLLECTION <span>→</span></button>
+      </article>
+    </div>
 
-    <footer class="bottom-bar"><span>◉&nbsp; PACIFIC OCEAN <span class="footer-dot">·</span> 34° 12' N, 128° 04' W</span><span class="footer-right">A LITTLE PATIENCE GOES A LONG WAY <span>↗</span></span></footer>
-    <div class="toast" id="toast"></div>
+    <div class="overlay" id="logOverlay" role="dialog" aria-modal="true" aria-labelledby="logTitle">
+      <section class="modal log-modal">
+        <header class="modal-head">
+          <div>
+            <p class="kicker">YOUR LOGBOOK</p>
+            <h2 id="logTitle">Fish Log</h2>
+            <p class="modal-sub">Every species you have landed in the Pacific. Rarer fish are worth more.</p>
+          </div>
+          <button class="modal-close" type="button" data-close aria-label="Close fish log">×</button>
+        </header>
+        <div class="log-summary">
+          <div class="summary-stat"><b id="logUnique">0</b><span>SPECIES FOUND</span></div>
+          <div class="summary-stat"><b id="logTotal">0</b><span>TOTAL CATCHES</span></div>
+          <div class="summary-stat"><b id="logBest">—</b><span>BEST CATCH</span></div>
+          <div class="summary-progress"><div class="completion-ring" id="completionRing"><b id="logPercent">0%</b></div><span>COMPLETE</span></div>
+        </div>
+        <div class="log-tabs" id="logTabs">
+          <button class="active" type="button" data-filter="all">ALL SPECIES <span>12</span></button>
+          <button type="button" data-filter="found">DISCOVERED <span id="foundTabCount">0</span></button>
+          <button type="button" data-filter="missing">UNDISCOVERED <span id="missingTabCount">12</span></button>
+        </div>
+        <div class="fish-grid" id="fishGrid"></div>
+        <footer class="modal-foot">
+          <span>Tip: a luckier rod tempts rarer fish. Progress saves automatically.</span>
+          <button class="reset-button" id="resetSave" type="button">RESET PROGRESS</button>
+        </footer>
+      </section>
+    </div>
+
+    <div class="overlay" id="storeOverlay" role="dialog" aria-modal="true" aria-labelledby="storeTitle">
+      <section class="modal store-modal">
+        <header class="modal-head">
+          <div>
+            <p class="kicker">EQUIPMENT</p>
+            <h2 id="storeTitle">Rod Store</h2>
+            <p class="modal-sub">Better rods reel faster, hold tension longer, and tempt rarer fish.</p>
+          </div>
+          <button class="modal-close" type="button" data-close aria-label="Close rod store">×</button>
+        </header>
+        <div class="store-wallet"><span>YOUR COINS</span><b><span class="coin">✦</span> <span id="storeCoins">240</span></b></div>
+        <div class="rod-list" id="rodList"></div>
+        <footer class="modal-foot"><span>Every rod is a permanent upgrade. Your catch history is kept.</span></footer>
+      </section>
+    </div>
   </main>
   <script src="game.js"></script>
 </body>
